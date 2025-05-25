@@ -1,5 +1,4 @@
-import React from 'react'
-import regoster from './RegisterPage'
+
 
 const LoginPage = () => {
   return (
