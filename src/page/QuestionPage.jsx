@@ -1,13 +1,17 @@
 import Next from '../components/nextBtn.jsx'
 import Finish from '../components/finishBtn.jsx'
 import Timer from '../components/setTimer.jsx'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const QuestionPage = () => {
     const [question, setQuestion] = useState([])
     const [clickQuestion, setClickQuestion] = useState(0)
     const [selectAnswer, setSelectedAnswer] = useState({})
     const [loading, setLoading] = useState(true)
+    const [isTimeUp, setIsTimeUp] = useState(false)
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -43,7 +47,14 @@ const QuestionPage = () => {
             }
         }
         fetchQuestions()
-    }, [])
+
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            alert('Login terlebih dahulu!');
+            navigate('/');
+            return
+        }
+    }, [navigate])
 
     const handleAnswer = (answer) => {
         setSelectedAnswer(prev => {
@@ -69,9 +80,34 @@ const QuestionPage = () => {
         }
     }
 
-    const totalTime = question.length * 60
+    const handleFinish = () => {
+        const completedAnswers = { ...selectAnswer }
+        question.forEach((_, idx) => {
+            if (completedAnswers[idx] === undefined) {
+                completedAnswers[idx] = ""
+            }
+        })
+
+        localStorage.setItem('quizData', JSON.stringify({
+            question,
+            clickQuestion,
+            selectAnswer
+        }))
+        window.location.href = '/score'
+    }
+
+    const totalTime = question.length * 45
+    const isLastQuestion = clickQuestion === question.length - 1
     const handleTimeUp = () => {
-        alert("Waktu habis! Silakan klik 'Selesai' untuk melihat hasil.")
+        if (!isTimeUp) {
+            setIsTimeUp(true)
+            alert("Waktu habis! Silakan klik 'Selesai' untuk melihat hasil.")
+            document.querySelectorAll('button').forEach(button => {
+                if (!button.classList.contains('finish-btn')) {
+                    button.disabled = true
+                }
+            })
+        }
     }
 
     if (loading) return <div className='text-center mt-20'>Loading...</div>
@@ -127,11 +163,14 @@ const QuestionPage = () => {
                 </div>
             </div>
             <div>
-                {/* Timer */}
                 <Timer totalTime={totalTime} timeUp={handleTimeUp} />
             </div>
             <div className="absolute bottom-90 right-40">
-                <Finish />
+                {isLastQuestion || isTimeUp ? (
+                    <Finish onClick={handleFinish} />
+                ) : (
+                    <Next onClick={handleNext} />
+                )}
             </div>
         </div >
     )
