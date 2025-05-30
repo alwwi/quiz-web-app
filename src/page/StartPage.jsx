@@ -35,17 +35,6 @@ const StartPage = () => {
         className="inline-flex items-center justify-center bg-gradient-to-r from-red-500 via-orange-400 to-orange-500 text-white px-14 py-4 rounded-full font-semibold text-xl shadow-lg hover:scale-105 transform transition duration-300"
       >
         Mulai Tes!
-        {/* <svg
-          className="ml-3 w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-        </svg> */}
       </a>
     </div>
     <a
