@@ -22,6 +22,7 @@ const QuestionPage = () => {
                     const parsedData = JSON.parse(cached)
                     setQuestion(parsedData.question)
                     setClickQuestion(parsedData.clickQuestion || 0)
+                    setSelectedAnswer(parsedData.selectAnswer || {})
                     setLoading(false)
                     return
                 }
@@ -110,70 +111,86 @@ const QuestionPage = () => {
         }
     }
 
+    const answeredQuestion = (idx) => {
+        const btnSelext = idx === clickQuestion
+        const isAnswered = selectAnswer[idx] !== undefined
+        if(btnSelext) {
+            return 'bg-blue-600 font-semibold rounded-lg hover:bg-blue-700 transition duration-300 cursor-pointer text-white shadow-lg transform scale-110'
+        }
+        if (isAnswered) {
+            return 'bg-blue-600 font-semibold rounded-lg hover:bg-blue-700 text-white'
+        }
+        return 'border-gray-400 hover:border-blue-600 hover:shadow-lg hover:bg-blue-100 cursor-pointer'
+    }
+
     if (loading) return <div className='text-center mt-20'>Loading...</div>
 
     const questionShowing = question[clickQuestion]
 
     return (
-        <div className="w-full h-screen flex">
-            <div className="w-[30%] h-screen flex pt-16 bg-gray-300">
-                <div className="flex-col w-full px-5">
-                    <div className="flex justify-between mb-5">
-                        <p>Soal :</p>
-                        <p>{clickQuestion + 1}/{question.length}</p>
-                    </div>
-                    <div className="grid grid-cols-5 gap-3 px-5">
-                        {question.map((_, idx) => (
-                            <div
+        <div className="w-full h-screen flex bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200">
+            <aside className="w-[28%] h-full bg-white shadow-2xl rounded-r-3xl pt-16 px-8 overflow-y-auto">
+                <div className="flex justify-between mb-8 text-lg font-bold text-gray-800 tracking-wide">
+                    <span>Soal :</span>
+                    <span>{clickQuestion + 1}/{question.length}</span>
+                </div>
+                <div className="grid grid-cols-5 gap-4">
+                    {question.map((_, idx) => (
+                        <button
+                            key={idx}
+                            className=
+                            {`p-3 rounded-xl border-2 transition-all duration-300 shadow-md
+                                ${answeredQuestion(idx)} cursor-pointer
+                            `}
+                            onClick={() => {
+                                setClickQuestion(idx);
+                                localStorage.setItem(
+                                    'quizData',
+                                    JSON.stringify({ question, clickQuestion: idx })
+                                );
+                            }}
+                        >
+                            {idx + 1}
+                        </button>
+                    ))}
+                </div>
+            </aside>
+            <main className="flex-1 pt-24 px-16 overflow-auto">
+                <h2
+                    className="text-3xl font-extrabold mb-10 text-gray-900 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: questionShowing.question }}
+                ></h2>
+                <div className="flex flex-col gap-6">
+                    {questionShowing.answers.map((ans, idx) => {
+                        const isSelected = selectAnswer[clickQuestion] === ans;
+                        return (
+                            <button
                                 key={idx}
-                                className={`p-[6px] rounded-md border-2 border-gray-500 text-center cursor-pointer hover:bg-gray-400
-                                ${idx === clickQuestion ? 'bg-blue-500 text-white border-blue-500' : 'border-gray-500 hover:bg-gray-400'}`}
-                                onClick={() => {
-                                    setClickQuestion(idx)
-                                    localStorage.setItem('quizData', JSON.stringify({
-                                        question,
-                                        clickQuestion: idx
-                                    }))
-                                }}>
-                                <p>{idx + 1}</p></div>
-                        ))}
-                    </div>
+                                className=
+                                {`w-[85%] max-w-3xl px-8 py-5 rounded-2xl flex gap-5 text-left font-semibold text-lg transition
+                                    ${isSelected
+                                    ? 'bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-600 text-white shadow-lg transform scale-[1.03]'
+                                    : 'bg-white border-2 border-gray-300 hover:border-blue-500 hover:shadow-md hover:bg-pink-50 cursor-pointer'}
+                                `}
+                                onClick={() => handleAnswer(ans)}
+                                dangerouslySetInnerHTML={{
+                                    __html: `<span class="text-xl font-bold">${String.fromCharCode(65 + idx)}.</span> <span class="flex-1">${ans}</span>`,
+                                }}
+                            />
+                        );
+                    })}
                 </div>
-            </div>
-            <div className="w-full h-screen flex justify-center pt-20">
-                <div className="w-[80%]">
-                    <h2 className="text-xl font-semibold mb-6 break-words pr-20"
-                        dangerouslySetInnerHTML={{ __html: questionShowing.question }}>
-                    </h2>
-                    <div className="flex flex-col">
-                        {questionShowing.answers.map((ans, idx) => {
-                            const isSelected = selectAnswer[clickQuestion] === ans
-                            return (
-                                <button
-                                    key={idx}
-                                    className={`w-[80%] px-4 py-2 text-left break-words flex gap-2
-                                        ${isSelected ? 'bg-blue-100' : 'hover:bg-gray-100 cursor-pointer'}`}
-                                    onClick={() => handleAnswer(ans)}
-                                    dangerouslySetInnerHTML={{ __html: `<span>${String.fromCharCode(65 + idx)}.</span> <span className="w-full">${ans}</span>` }}>
-
-                                </button>
-                            )
-                        })}
-                    </div>
+                <div className="mt-16 flex justify-end fixed bottom-10 right-10 gap-5">
+                    {isLastQuestion || isTimeUp ? (
+                        <Finish onClick={handleFinish} />
+                    ) : (
+                        <Next onClick={handleNext} />
+                    )}
                 </div>
-            </div>
-            <div>
-                <Timer totalTime={totalTime} timeUp={handleTimeUp} />
-            </div>
-            <div className="absolute bottom-90 right-40">
-                {isLastQuestion || isTimeUp ? (
-                    <Finish onClick={handleFinish} />
-                ) : (
-                    <Next onClick={handleNext} />
-                )}
-            </div>
-        </div >
-    )
+            </main>
+            <Timer totalTime={totalTime} timeUp={handleTimeUp} />
+        </div>
+    );
 }
 
 export default QuestionPage

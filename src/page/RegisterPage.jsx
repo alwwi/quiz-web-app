@@ -2,10 +2,10 @@ import { useState } from "react"
 import bcrypt from 'bcryptjs'
 
 const RegisterPage = () => {
-  const [form, setForm] = useState({username: '',email: '',password: ''})
+  const [form, setForm] = useState({ username: '', email: '', password: '' })
 
   const handleChange = (e) => {
-    setForm({...form, [e.target.name]: e.target.value})
+    setForm({ ...form, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = (e) => {
@@ -33,20 +33,49 @@ const RegisterPage = () => {
   }
 
   return (
-    <div>
-      <div className='w-full h-screen flex items-center justify-center'>
-        <div className='bg-red-100 w-[30%] h-[70%] rounded-2xl'>
-          <div>
-            <h1 className='text-center text-3xl font-bold mt-10'>Register</h1>
-            <form className='flex flex-col items-center mt-10' onSubmit={handleSubmit}>
-              <input type="text" name="username" placeholder='Username' onChange={handleChange} value={form.username} className='w-[80%] h-[50px] rounded-lg border-2 border-gray-300 mb-5 px-4'/>
-              <input type="email" name="email" placeholder='Email' onChange={handleChange} value={form.email} required className='w-[80%] h-[50px] rounded-lg border-2 border-gray-300 mb-5 px-4' />
-              <input type="password" name="password" placeholder='Password' onChange={handleChange} value={form.password} required className='w-[80%] h-[50px] rounded-lg border-2 border-gray-300 mb-5 px-4' />
-              <button type="submit" className='w-[80%] h-[50px] bg-blue-500 text-white rounded-lg cursor-pointer'>Register</button>
-              <p className='mt-5'>Already have an account? <a href="/" className='text-blue-500'>Login</a></p>
-            </form>
-          </div>
-        </div>
+    <div className="w-full min-h-screen flex items-center justify-center bg-gradient-to-r from-red-200 via-red-300 to-red-400">
+      <div className="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl">
+        <h1 className="text-center text-4xl font-extrabold text-red-700 mb-12">Register</h1>
+        <form className="flex flex-col" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            value={form.username}
+            className="mb-6 px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            value={form.email}
+            required
+            className="mb-6 px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            value={form.password}
+            required
+            className="mb-6 px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+          />
+          <button
+            type="submit"
+            className="w-full py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300 cursor-pointer"
+          >
+            Register
+          </button>
+        </form>
+        <p className="mt-6 text-center text-gray-700">
+          Already have an account?{' '}
+          <a href="/" className="text-red-600 font-semibold hover:underline">
+            Login
+          </a>
+        </p>
       </div>
     </div>
   )

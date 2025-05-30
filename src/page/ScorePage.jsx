@@ -32,33 +32,47 @@ const ScorePage = () => {
 
 
     return (
-        <div>
-            <div className="w-full h-screen flex justify-center items-center bg-gray-100">
-                <div className="w-[30%] h-[70%] bg-white p-8 rounded-lg shadow-lg flex flex-col justify-center items-center">
-                    <p className="text-xl mb-6">Selamat anda telah menyelesaikan kuis!</p>
-                    <div className='flex flex-col items-center mb-4 text-2xl font-semibold'>
-                        <h2>Skor Anda</h2>
-                        <h2>{finalScore}</h2>
-                    </div>
-                    <div className="flex flex-col items-center mb-4">
-                        <span>Total Soal:</span>
-                        <span>{questionCount}</span>
-                    </div>
-                    <div className="flex flex-col items-center mb-4">
-                        <span>Jawaban Benar:</span>
-                        <span>{correctAnswers}</span>
-                    </div>
-                    <div className="flex flex-col items-center mb-4">
-                        <span>Jawaban Salah:</span>
-                        <span>{wrongAnswers}</span>
-                    </div>
-                    <button className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer" onClick={() => {localStorage.removeItem('quizData'); window.location.href = '/start'}}>
-                        Kembali ke Beranda
-                    </button>
-                </div>
-            </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-300 via-blue-400 to-blue-500 p-6">
+      <div className="bg-white max-w-md w-full rounded-3xl shadow-2xl p-10 flex flex-col items-center text-center">
+        <h1 className="text-4xl font-extrabold mb-8 text-gray-900 drop-shadow-md">
+          Selamat, Anda telah menyelesaikan kuis!
+        </h1>
+
+        <div className=" text-blue-500 rounded-xl shadow-lg w-40 p-2 mb-8 bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-600">
+            <div className='bg-white py-6 flex flex-col items-center'>
+
+          <p className="text-lg">Skor Anda</p>
+          <p className="text-5xl mt-1 font-bold">{finalScore}</p>
         </div>
-    )
+            </div>
+
+        <div className="w-full grid grid-cols-2 gap-6 text-gray-700 font-semibold mb-12">
+          <div className="bg-purple-100 rounded-xl py-4 shadow-md">
+            <p>Total Soal</p>
+            <p className="text-2xl mt-2">{questionCount}</p>
+          </div>
+          <div className="bg-pink-100 rounded-xl py-4 shadow-md">
+            <p>Jawaban Benar</p>
+            <p className="text-2xl mt-2">{correctAnswers}</p>
+          </div>
+          <div className="bg-red-100 rounded-xl py-4 shadow-md col-span-2">
+            <p>Jawaban Salah</p>
+            <p className="text-2xl mt-2">{wrongAnswers}</p>
+          </div>
+        </div>
+
+        <button
+          className="px-10 py-3 bg-gradient-to-r from-red-500 via-orange-400 to-orange-500 text-white rounded-full font-bold text-lg shadow-lg hover:scale-105 transform transition duration-300 cursor-pointer"
+          onClick={() => {
+            localStorage.removeItem('quizData')
+            window.location.href = '/start'
+          }}
+        >
+          Kembali ke Beranda
+        </button>
+      </div>
+    </div>
+  )
 }
 
 export default ScorePage
