@@ -65,7 +65,7 @@ const ScorePage = () => {
           className="px-10 py-3 bg-gradient-to-r from-red-500 via-orange-400 to-orange-500 text-white rounded-full font-bold text-lg shadow-lg hover:scale-105 transform transition duration-300 cursor-pointer"
           onClick={() => {
             localStorage.removeItem('quizData')
-            window.location.href = '/start'
+            navigate('/start')
           }}
         >
           Kembali ke Beranda

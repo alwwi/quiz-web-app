@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const StartPage = () => {
   const navigate = useNavigate();
@@ -30,20 +30,20 @@ const StartPage = () => {
       <p className="text-lg text-gray-700 max-w-xl mb-12">
         Siapkan dirimu untuk menguji pengetahuanmu dengan 20 soal seru. Semangat mengerjakan!
       </p>
-      <a
-        href="/soal"
+      <Link
+        to="/soal"
         className="inline-flex items-center justify-center bg-gradient-to-r from-red-500 via-orange-400 to-orange-500 text-white px-14 py-4 rounded-full font-semibold text-xl shadow-lg hover:scale-105 transform transition duration-300"
       >
         Mulai Tes!
-      </a>
+      </Link>
     </div>
-    <a
-      href="/"
+    <Link
+      to="/"
       onClick={() => localStorage.removeItem('currentUser')}
       className="fixed top-10 right-10 bg-white bg-opacity-70 px-8 py-3 rounded-full font-semibold text-gray-900 shadow-md hover:scale-105 transform transition duration-300 hover:bg-gray-300"
     >
       Keluar
-    </a>
+    </Link>
   </div>
 )
 };

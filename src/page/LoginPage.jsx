@@ -1,8 +1,10 @@
 import { useState } from "react"
 import bcrypt from 'bcryptjs'
+import { Link, useNavigate } from "react-router-dom"
 
 const LoginPage = () => {
   const [form, setForm] = useState({ username: '', password: '' })
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -28,7 +30,7 @@ const LoginPage = () => {
 
     localStorage.setItem('currentUser', user.id)
     alert('Login berhasil')
-    window.location.href = '/start'
+    navigate('/start')
   }
 
   return (
@@ -63,9 +65,9 @@ const LoginPage = () => {
         </form>
         <p className="mt-6 text-center text-gray-700">
           Don't have an account?{' '}
-          <a href="/register" className="text-blue-600 font-semibold hover:underline">
+          <Link to="/register" className="text-blue-600 font-semibold hover:underline">
             Sign Up
-          </a>
+          </Link>
         </p>
       </div>
     </div>

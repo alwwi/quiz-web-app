@@ -94,7 +94,7 @@ const QuestionPage = () => {
             clickQuestion,
             selectAnswer
         }))
-        window.location.href = '/score'
+        navigate('/score')
     }
 
     const totalTime = question.length * 45
