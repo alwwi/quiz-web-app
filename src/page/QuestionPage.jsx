@@ -128,13 +128,48 @@ const QuestionPage = () => {
     const questionShowing = question[clickQuestion]
 
     return (
-        <div className="w-full h-screen flex bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200">
-            <aside className="w-[28%] h-full bg-white shadow-2xl rounded-r-3xl pt-16 px-8 overflow-y-auto">
-                <div className="flex justify-between mb-8 text-lg font-bold text-gray-800 tracking-wide">
+        <div className="w-full min-h-screen lg:h-screen flex flex-col lg:flex-row-reverse bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200">
+
+            <main className="flex-1 pt-24 px-16 overflow-auto">
+                <h2
+                    className="lg:text-3xl text-xl font-extrabold mb-10 text-gray-900 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: questionShowing.question }}
+                ></h2>
+                <div className="flex flex-col gap-6">
+                    {questionShowing.answers.map((ans, idx) => {
+                        const isSelected = selectAnswer[clickQuestion] === ans;
+                        return (
+                            <button
+                                key={idx}
+                                className=
+                                {`w-full max-w-3xl px-8 py-5 rounded-2xl flex gap-5 text-left font-semibold text-lg transition
+                                    ${isSelected
+                                    ? 'bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-600 text-white shadow-lg transform scale-[1.03]'
+                                    : 'bg-transparent border-2 border-gray-500 hover:border-blue-500 hover:shadow-md hover:bg-pink-50 cursor-pointer'}
+                                `}
+                                onClick={() => handleAnswer(ans)}
+                                dangerouslySetInnerHTML={{
+                                    __html: `<span class="text-xl font-bold">${String.fromCharCode(65 + idx)}.</span> <span class="flex-1">${ans}</span>`,
+                                }}
+                            />
+                        );
+                    })}
+                </div>
+                <div className="mt-16 flex justify-end lg:absolute bottom-10 right-10 gap-5">
+                    {isLastQuestion || isTimeUp ? (
+                        <Finish onClick={handleFinish} />
+                    ) : (
+                        <Next onClick={handleNext} />
+                    )}
+                </div>
+            </main>
+
+            <aside className="lg:w-[28%] lg:h-full lg:bg-white lg:shadow-2xl rounded-r-3xl py-15 lg:py-16 px-8 overflow-y-auto bg-transparent">
+                <div className="flex justify-between lg:mb-8 text-lg font-bold text-gray-800 tracking-wide">
                     <span>Soal :</span>
                     <span>{clickQuestion + 1}/{question.length}</span>
                 </div>
-                <div className="grid grid-cols-5 gap-4">
+                <div className="lg:grid lg:grid-cols-5 lg:gap-4 flex overflow-x-auto gap-2 max-w-87 p-3">
                     {question.map((_, idx) => (
                         <button
                             key={idx}
@@ -155,39 +190,6 @@ const QuestionPage = () => {
                     ))}
                 </div>
             </aside>
-            <main className="flex-1 pt-24 px-16 overflow-auto">
-                <h2
-                    className="text-3xl font-extrabold mb-10 text-gray-900 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: questionShowing.question }}
-                ></h2>
-                <div className="flex flex-col gap-6">
-                    {questionShowing.answers.map((ans, idx) => {
-                        const isSelected = selectAnswer[clickQuestion] === ans;
-                        return (
-                            <button
-                                key={idx}
-                                className=
-                                {`w-[85%] max-w-3xl px-8 py-5 rounded-2xl flex gap-5 text-left font-semibold text-lg transition
-                                    ${isSelected
-                                    ? 'bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-600 text-white shadow-lg transform scale-[1.03]'
-                                    : 'bg-white border-2 border-gray-300 hover:border-blue-500 hover:shadow-md hover:bg-pink-50 cursor-pointer'}
-                                `}
-                                onClick={() => handleAnswer(ans)}
-                                dangerouslySetInnerHTML={{
-                                    __html: `<span class="text-xl font-bold">${String.fromCharCode(65 + idx)}.</span> <span class="flex-1">${ans}</span>`,
-                                }}
-                            />
-                        );
-                    })}
-                </div>
-                <div className="mt-16 flex justify-end fixed bottom-10 right-10 gap-5">
-                    {isLastQuestion || isTimeUp ? (
-                        <Finish onClick={handleFinish} />
-                    ) : (
-                        <Next onClick={handleNext} />
-                    )}
-                </div>
-            </main>
             <Timer totalTime={totalTime} timeUp={handleTimeUp} />
         </div>
     );
